@@ -1,0 +1,14 @@
+venv/
+.idea/
+.ipynb_checkpoints/
+infra/id_rsa.pub
+spark-local/
+data/lake/
+
+# Terraforn
+.terraform/
+.terraform.lock.hcl
+
+dwh.cfg
+
+.env
