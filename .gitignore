@@ -3,7 +3,12 @@ venv/
 .ipynb_checkpoints/
 infra/id_rsa.pub
 spark-local/
-data/lake/
+
+# airflow related
+airflow.db
+airflow-webserver.pid
+standalone_admin_password.txt
+logs/
 
 # Terraforn
 .terraform/
