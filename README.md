@@ -195,11 +195,17 @@ For this project, I'll be using Amazon Web Services (AWS) to store data and run 
 - Redshift
 - S3
 
-Make sure that aws profile in `~/.aws/credentials` is set to `udacity`.
-
+### Prerequisites:
 To generate the infrastructure, I'll be using the [Terraform](https://www.terraform.io/) tool.
+
+1. Make sure that aws profile in `~/.aws/credentials` is set to `udacity`.
+2. [Terraform cloud](https://cloud.hashicorp.com/products/terraform) are used to save the remote state. 
+   Local teraform state could be used as well. Just replace the cloud attribute with `local` in `infra/main.tf` file. 
+
+### Creating the infrastructure
 ```bash
 cd infra/
+terraform init
 terrafrom apply
 ```
 ---
