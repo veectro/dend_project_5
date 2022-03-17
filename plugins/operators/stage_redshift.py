@@ -3,7 +3,6 @@ from pprint import pprint
 
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
-
 from airflow.models.baseoperator import BaseOperator
 
 
@@ -26,8 +25,12 @@ class StageToRedshiftOperator(BaseOperator):
 
     def execute(self, context):
         self.log.info('StageToRedshiftOperator not implemented yet')
-        aws_base_hook = S3Hook(self.aws_credentials)
-        pprint(aws_base_hook.get_credentials())
+
+        # Getting credentials from AWS Connection
+        s3_hook = S3Hook(self.aws_credentials)
+        pprint(s3_hook.get_credentials())
+        s3_keys = s3_hook.list_keys(self.s3_bucket, self.s3_key)
+        pprint(s3_keys)
         redshift = PostgresHook(connection=self.redshift_conn)
         pprint(self.redshift_conn)
         pprint(os.environ)
