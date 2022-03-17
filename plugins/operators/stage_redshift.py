@@ -3,10 +3,18 @@ from airflow.models.baseoperator import BaseOperator
 
 
 class StageToRedshiftOperator(BaseOperator):
+    """
+    Loads data from S3 to Redshift staging tables.
+
+    :param redshift_conn_id: Redshift connection ID
+    :param table: Table name
+    :param s3_bucket: Source S3 bucket name
+    :param s3_key: Source S3 key name
+    :param json_path: JSON path location that defining the data structure
+    """
     ui_color = '#358140'
 
     def __init__(self,
-                 aws_credentials: str,
                  redshift_conn_id: str,
                  s3_bucket: str,
                  s3_key: str,
@@ -16,7 +24,6 @@ class StageToRedshiftOperator(BaseOperator):
                  json_format='auto',
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.aws_credentials = aws_credentials
         self.redshift_conn_id = redshift_conn_id
         self.s3_bucket = s3_bucket
         self.s3_key = s3_key

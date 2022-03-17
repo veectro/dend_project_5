@@ -3,6 +3,13 @@ from airflow.models import BaseOperator
 
 
 class LoadFactOperator(BaseOperator):
+    """
+    Loads data from staging tables into fact tables.
+
+    :param table_name: The name of the table to load data into.
+    :param redshift_conn_id: The connection id of the redshift connection.
+    :param query: sql select query to load data from staging tables.
+    """
     ui_color = '#F98866'
 
     def __init__(self,

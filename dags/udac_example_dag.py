@@ -9,6 +9,30 @@ from operators.load_dimension import LoadDimensionOperator
 from operators.data_quality import DataQualityOperator
 from helpers import SqlQueries
 
+DOCUMENTATION_MD = """
+## udac_example_dag
+
+This DAG load the data from the S3 bucket and then load the data into the Redshift cluster in staging tables.
+From the staging tables, the data is loaded into the fact and dimension tables.
+
+### Input
+S3 Buckets :   
+  
+- `s3://udacity-dend/log_data`
+- `s3://udacity-dend/song_data`
+
+### Output
+Redshift Tables :   
+  
+- `staging_events`
+- `staging_songs`
+- `songplays`
+- `artists`
+- `songs`
+- `users`
+- `time`
+"""
+
 default_args = {
     'owner': 'udacity',
     'start_date': datetime(2019, 1, 12),
@@ -21,7 +45,9 @@ dag = DAG('udac_example_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='0 * * * *',
-          catchup=False)
+          catchup=False,
+          doc_md=DOCUMENTATION_MD
+          )
 
 start_operator = DummyOperator(task_id='Begin_execution', dag=dag)
 
@@ -37,7 +63,6 @@ create_tables_in_redshift = PostgresOperator(
 
 stage_events_to_redshift = StageToRedshiftOperator(
     task_id='Stage_events',
-    aws_credentials='aws_conn_id',
     redshift_conn_id='redshift_conn_id',
     s3_bucket='udacity-dend',
     s3_key='log_data',
@@ -49,7 +74,6 @@ stage_events_to_redshift = StageToRedshiftOperator(
 
 stage_songs_to_redshift = StageToRedshiftOperator(
     task_id='Stage_songs',
-    aws_credentials='aws_conn_id',
     redshift_conn_id='redshift_conn_id',
     s3_bucket='udacity-dend',
     s3_key='song_data',
@@ -100,7 +124,10 @@ load_time_dimension_table = LoadDimensionOperator(
 
 run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
-    dag=dag
+    dag=dag,
+    redshift_conn_id='redshift_conn_id',
+    test_queries=[],
+    expected_results=[]
 )
 
 end_operator = DummyOperator(task_id='Stop_execution', dag=dag)

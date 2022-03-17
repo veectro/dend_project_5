@@ -229,7 +229,6 @@ pip install "apache-airflow[postgres,amazon]==${AIRFLOW_VERSION}" --constraint "
 docker-compose up -d
 ```
 
-```bash
-export AIRFLOW_HOME=. # setup location of airflow
-airflow standalone # start airflow in standalone mode
-``
+- Login to Airflow UI: http://localhost:8080
+  - User: airflow
+  - Password: airflow

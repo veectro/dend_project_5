@@ -1,22 +1,28 @@
-from airflow.hooks.postgres_hook import PostgresHook
+from typing import List
+
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.models import BaseOperator
-from airflow.utils.decorators import apply_defaults
+
 
 class DataQualityOperator(BaseOperator):
+    """
+    Checks the data quality of the tables in the database.
 
+    :param redshift_conn_id: Redshift connection ID
+    :param test_queries: list of queries to be tested
+    :param expected_results: list of expected results for each query
+    """
     ui_color = '#89DA59'
 
-    @apply_defaults
     def __init__(self,
-                 # Define your operators params (with defaults) here
-                 # Example:
-                 # conn_id = your-connection-name
+                 redshift_conn_id: str,
+                 test_queries: List[str],
+                 expected_results: List[int],
                  *args, **kwargs):
-
         super(DataQualityOperator, self).__init__(*args, **kwargs)
-        # Map params here
-        # Example:
-        # self.conn_id = conn_id
+        self.redshift_conn_id = redshift_conn_id
+        self.test_queries = test_queries
+        self.expected_results = expected_results
 
     def execute(self, context):
         self.log.info('DataQualityOperator not implemented yet')
