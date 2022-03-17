@@ -1,11 +1,7 @@
 class SqlQueries:
-    # NOTE: Generate songplay_id based on MD5 of Random Number or events.start_time
-    # Problem with original code:
-    #       md5(events.sessionid | | events.start_time)
-    # That is if the session id is null(most of the time) then the md5 will be null
     songplay_table_insert = ("""
         SELECT
-                MD5(RANDOM() || events.start_time) songplay_id,
+                MD5(events.sessionid || events.start_time) songplay_id,
                 events.start_time, 
                 events.userid, 
                 events.level, 
