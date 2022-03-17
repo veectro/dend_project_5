@@ -1,8 +1,4 @@
-import os
-from pprint import pprint
-
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.models.baseoperator import BaseOperator
 
 
@@ -11,17 +7,17 @@ class StageToRedshiftOperator(BaseOperator):
 
     def __init__(self,
                  aws_credentials: str,
-                 redshift_conn: str,
+                 redshift_conn_id: str,
                  s3_bucket: str,
                  s3_key: str,
                  target_table: str,
-                 redshift_arn:str,
+                 redshift_arn: str,
                  region: str = 'us-west-2',
-                 json_format = 'auto',
+                 json_format='auto',
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.aws_credentials = aws_credentials
-        self.redshift_conn = redshift_conn
+        self.redshift_conn_id = redshift_conn_id
         self.s3_bucket = s3_bucket
         self.s3_key = s3_key
         self.target_table = target_table
@@ -30,12 +26,10 @@ class StageToRedshiftOperator(BaseOperator):
         self.json_format = json_format
 
     def execute(self, context):
-        self.log.info('StageToRedshiftOperator not implemented yet')
+        self.log.info('Beginning to stage data to redshift')
 
         # Connecting to Redshift
-        redshift_hook = PostgresHook(postgres_conn_id=self.redshift_conn)
-        pprint(self.redshift_conn)
-        pprint(os.environ)
+        redshift_hook = PostgresHook(postgres_conn_id=self.redshift_conn_id)
 
         # Creating staging table
         # based on https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-data-source-s3.html
@@ -48,4 +42,4 @@ class StageToRedshiftOperator(BaseOperator):
             FORMAT as json '{self.json_format}'
         """
         redshift_hook.run(copy_query)
-
+        self.log.info('Successfully stage data to redshift')
