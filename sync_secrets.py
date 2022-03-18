@@ -1,6 +1,5 @@
 import boto3
 import json
-import shutil
 
 AWS_PROFILE = 'udacity'
 AWS_REGION = 'us-west-2'
@@ -31,9 +30,6 @@ def get_secret(secret_name, region_name=AWS_REGION, aws_profile=AWS_PROFILE) -> 
 
 
 if __name__ == '__main__':
-    # copy file dwh.cfg.template to dwh.cfg with shutil
-    shutil.copy('dwh.cfg.template', 'dwh.cfg')
-
     try:
         secret = get_secret(SECRET_NAME)
         airlow_conn_id = f"postgresql://{secret['REDSHIFT_USERNAME']}:{secret['REDSHIFT_PASSWORD']}" \

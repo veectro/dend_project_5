@@ -27,15 +27,27 @@ In this Project an ETL Pipeline is implemented, which
 
 ```
 .
-├── assets : static files
-├── create_tables.py : script to create the tables
-├── dwh.cfg.template : template file to genereate the config files
-├── etl.py : script to execute the ETL pipeline
-├── infra : terraform folder to deploy the infrastructure
-├── README.md : project description
-├── requirements.txt : list of all dependencies
-├── sql_queries.py : define the queries to be executed
-├── sync_secrets.py : script to sync the secrets from the AWS Secrets Manager to the local config files
+├── assets : contains static assets
+├── dags
+│   ├── sql
+│   │   └── create_tables.sql : sql to create redshift schema
+│   └── udac_example_dag.py : main airflow dag file
+├── docker-compose.yaml : docker compose file to run airflow
+├── infra : contains infrastructure files
+├── plugins
+│   ├── helpers
+│   │   ├── __init__.py
+│   │   └── sql_queries.py : sql queries to create tables
+│   ├── __init__.py
+│   └── operators
+│       ├── data_quality.py : operator for data quality checks
+│       ├── __init__.py
+│       ├── load_dimension.py : operator to  load dimension table
+│       ├── load_fact.py : operator to load fact table
+│       └── stage_redshift.py : operator to stage data into redshift
+├── README.md : project readme
+├── requirements.txt : project requirements
+└── sync_secrets.py : script to sync secrets from AWS Secrets Manager to .env file
 ```
 
 ---
