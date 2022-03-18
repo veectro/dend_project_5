@@ -126,8 +126,9 @@ run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
     dag=dag,
     redshift_conn_id='redshift_conn_id',
-    test_queries=[],
-    expected_results=[]
+    queries_tuples=[
+        ('SELECT COUNT(*) FROM songplays WHERE userid IS NULL',  0)
+    ]
 )
 
 end_operator = DummyOperator(task_id='Stop_execution', dag=dag)
