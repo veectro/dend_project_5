@@ -12,10 +12,11 @@ The source data resides in S3 and needs to be processed in Sparkify's data wareh
 ## Project Description
 
 In this Project an ETL Pipeline is implemented, which 
-1. copying from staging the data into redshift
-2. load the data from the staging into fact-table
-3. load the data from the staging into dimension-table
-4. run the data quality checks
+1. Creating the tables in the Redshift database if not exist
+2. copying from staging the data into redshift
+3. load the data from the staging into fact-table
+4. load the data from the staging into dimension-table
+5. run the data quality checks
 
 ![pipeline](./assets/pipeline.png)
 
@@ -210,7 +211,7 @@ terrafrom apply
 ```
 ---
 ## Installing Airflow
-Installing `airflow 2.2.4` and its packages to ease the development locally.
+Installing `airflow 2.2.4` and its packages to **ease the development** locally.
 ```bash
 export AIRFLOW_VERSION=2.2.4
 export PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
@@ -219,15 +220,21 @@ pip install "apache-airflow[postgres,amazon]==${AIRFLOW_VERSION}" --constraint "
 ```
 
 ## Run Airflow
-1. Fill out the `dwh.cfg` file with your AWS credentials. It could be done in 2 ways:
+1. Fillout `.env` file with all necessary environment variable. It could be done in 2 ways:
    1. By creating infrastructure yourself and sync secrets to your local machine.
       - Make sure `~/.aws/credentials` is set to `udacity`, otherwise change the variable `AWS_PROFILE` in `sync_secret.py`
-      - Run sync_secret.py to sync the AWS secrets to the `dwh.cfg` file. (It will generate automatically if it doesn't exist from the template file)
-   2. By filling out manually.
+      - Run sync_secret.py to sync the AWS secrets to the `.env` file. (It will generate automatically)
+   2. By filling out manually with following template in `.env`file:
+    ```bash
+    AIRFLOW_CONN_REDSHIFT_CONN_ID=<<FILL ME>>
+    AIRFLOW_VAR_REDSHIFT_IAM_ARN=<FILL ME>
+    ```
 
-```bash
-docker-compose up -d
-```
+2. Run airflow with `docker-compose up` command.
+    ```bash
+    docker-compose up -d
+    ```
+
 
 - Login to Airflow UI: http://localhost:8080
   - User: airflow
