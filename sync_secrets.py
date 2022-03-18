@@ -1,5 +1,3 @@
-import configparser
-
 import boto3
 import json
 import shutil
